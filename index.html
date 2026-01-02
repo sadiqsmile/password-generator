@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Responsive password generator built with HTML, CSS, and vanilla JavaScript." />
+    <title>(SK) Password Generator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar" role="banner">
+      <div class="topbar-inner">
+        <div class="topbar-block" aria-label="Current date and time">
+          <div class="topbar-label">Now</div>
+          <div id="dateTime" class="topbar-value">—</div>
+        </div>
+
+        <div class="topbar-block topbar-right" aria-label="Current weather">
+          <div class="topbar-label">Weather</div>
+          <div id="weatherText" class="topbar-value">—</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="card" aria-labelledby="title">
+        <header class="header">
+          <h1 id="title" class="title">(SK) Password Generator</h1>
+          <p class="subtitle">Generate secure passwords with the options you choose.</p>
+        </header>
+
+        <div class="row" role="group" aria-label="Generated password">
+          <label class="sr-only" for="passwordOutput">Generated password</label>
+          <input
+            id="passwordOutput"
+            class="output"
+            type="text"
+            inputmode="none"
+            autocomplete="off"
+            readonly
+            placeholder="Click Generate to create a password"
+          />
+          <button id="copyBtn" class="btn btn-secondary" type="button" aria-label="Copy password">
+            Copy
+          </button>
+        </div>
+
+        <div class="status" aria-live="polite" aria-atomic="true" id="statusMsg"></div>
+
+        <div class="divider" role="separator" aria-hidden="true"></div>
+
+        <div class="controls">
+          <div class="control">
+            <div class="control-head">
+              <label for="lengthSlider" class="label">Password length</label>
+              <span class="badge" aria-label="Selected password length">
+                <span id="lengthValue">16</span>
+              </span>
+            </div>
+            <input
+              id="lengthSlider"
+              class="slider"
+              type="range"
+              min="4"
+              max="32"
+              step="1"
+              value="16"
+            />
+            <div class="hint">Range: 4–32 characters</div>
+          </div>
+
+          <fieldset class="fieldset" aria-describedby="optionsHint">
+            <legend class="label">Include</legend>
+            <p id="optionsHint" class="hint">Select at least one option.</p>
+
+            <div class="grid">
+              <label class="check">
+                <input id="optUpper" type="checkbox" checked />
+                <span>Uppercase (A–Z)</span>
+              </label>
+
+              <label class="check">
+                <input id="optLower" type="checkbox" checked />
+                <span>Lowercase (a–z)</span>
+              </label>
+
+              <label class="check">
+                <input id="optNumbers" type="checkbox" checked />
+                <span>Numbers (0–9)</span>
+              </label>
+
+              <label class="check">
+                <input id="optSymbols" type="checkbox" />
+                <span>Symbols (!@#$…)</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="control">
+            <div class="control-head">
+              <span class="label">Strength</span>
+              <span id="strengthText" class="badge" aria-label="Password strength">—</span>
+            </div>
+            <div class="meter" aria-hidden="true">
+              <div id="strengthBar" class="meter-bar" style="width: 0%"></div>
+            </div>
+            <div class="hint">Based on length and character variety.</div>
+          </div>
+
+          <button id="generateBtn" class="btn btn-primary" type="button">Generate Password</button>
+        </div>
+
+        <footer class="footer">
+          <small>Tip: Use a password manager to store strong passwords.</small>
+        </footer>
+      </section>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
