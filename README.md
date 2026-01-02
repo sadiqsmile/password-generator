@@ -9,7 +9,17 @@ A responsive password generator built with **HTML, CSS, and vanilla JavaScript**
 - Ensures at least one character from each selected category
 - Secure random generation using `crypto.getRandomValues`
 - Copy-to-clipboard button with feedback
-- Top bar shows **current date/time** and **current weather** (uses browser location)
+
+## Screenshot
+
+![Password Generator Screenshot](assets/screenshot.png)
+
+To add your screenshot:
+
+1. Open the site in your browser.
+2. Take a screenshot.
+3. Save it as `assets/screenshot.png` in this project.
+4. Commit and push (steps below).
 
 ## Run locally
 
@@ -42,4 +52,4 @@ Then visit:
 
 ## Notes
 
-- Weather requires location permission in the browser.
+- This project is static (no backend). It runs entirely in the browser.
