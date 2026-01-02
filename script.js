@@ -47,111 +47,6 @@
     }
   }
 
-  function formatNow() {
-    const formatter = new Intl.DateTimeFormat(undefined, {
-      dateStyle: "medium",
-      timeStyle: "medium",
-    });
-    return formatter.format(new Date());
-  }
-
-  function weatherCodeToText(code) {
-    // Open-Meteo weather codes: https://open-meteo.com/en/docs
-    if (code === 0) return "Clear";
-    if (code === 1) return "Mainly clear";
-    if (code === 2) return "Partly cloudy";
-    if (code === 3) return "Overcast";
-    if (code === 45 || code === 48) return "Fog";
-    if ([51, 53, 55, 56, 57].includes(code)) return "Drizzle";
-    if ([61, 63, 65, 66, 67].includes(code)) return "Rain";
-    if ([71, 73, 75, 77].includes(code)) return "Snow";
-    if ([80, 81, 82].includes(code)) return "Rain showers";
-    if ([85, 86].includes(code)) return "Snow showers";
-    if (code === 95) return "Thunderstorm";
-    if (code === 96 || code === 99) return "Thunderstorm (hail)";
-    return "Unknown";
-  }
-
-  function startClock() {
-    const dateTimeEl = document.getElementById("dateTime");
-    if (!dateTimeEl) return;
-
-    const tick = () => {
-      dateTimeEl.textContent = formatNow();
-    };
-
-    tick();
-    window.setInterval(tick, 1000);
-  }
-
-  function startWeather() {
-    const weatherEl = document.getElementById("weatherText");
-    if (!weatherEl) return;
-
-    if (!navigator.geolocation) {
-      weatherEl.textContent = "Weather unavailable (no geolocation)";
-      return;
-    }
-
-    let lastCoords = null;
-
-    async function fetchWeather(latitude, longitude) {
-      const url =
-        `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(latitude)}` +
-        `&longitude=${encodeURIComponent(longitude)}` +
-        `&current=temperature_2m,weather_code,wind_speed_10m` +
-        `&timezone=auto`;
-
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error("Weather request failed");
-      const data = await res.json();
-
-      const current = data.current;
-      if (!current) throw new Error("Weather data missing");
-
-      const temp = typeof current.temperature_2m === "number" ? current.temperature_2m : null;
-      const code = typeof current.weather_code === "number" ? current.weather_code : null;
-
-      const desc = code == null ? "Unknown" : weatherCodeToText(code);
-      const tempText = temp == null ? "—" : `${Math.round(temp)}°C`;
-      return `${tempText} • ${desc}`;
-    }
-
-    function updateFromCoords() {
-      if (!lastCoords) return;
-      weatherEl.textContent = "Updating weather…";
-      fetchWeather(lastCoords.latitude, lastCoords.longitude)
-        .then((text) => {
-          weatherEl.textContent = text;
-        })
-        .catch(() => {
-          weatherEl.textContent = "Weather unavailable";
-        });
-    }
-
-    weatherEl.textContent = "Fetching location…";
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        lastCoords = {
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-        };
-        updateFromCoords();
-        // Refresh every 10 minutes
-        window.setInterval(updateFromCoords, 10 * 60 * 1000);
-      },
-      (err) => {
-        if (err && err.code === 1) weatherEl.textContent = "Weather needs location permission";
-        else weatherEl.textContent = "Weather unavailable";
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 8000,
-        maximumAge: 10 * 60 * 1000,
-      }
-    );
-  }
-
   function getSelectedOptions() {
     const upper = document.getElementById("optUpper").checked;
     const lower = document.getElementById("optLower").checked;
@@ -348,9 +243,6 @@
       }
     });
 
-    // Top bar widgets
-    startClock();
-    startWeather();
   }
 
   // Boot
